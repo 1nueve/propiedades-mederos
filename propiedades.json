@@ -54,6 +54,54 @@
         }
       ],
       "wa_corto_base": "https://propiedades-mederos.s.gy/renta-depa-luma-city"
+    },
+    {
+      "id": "R5",
+      "slug": "renta-consultorio-momentum",
+      "tipo": "Consultorio",
+      "operacion": "Renta mensual",
+      "zona": "Momentum Centro Sur",
+      "precio": 10500,
+      "titulo": "Consultorio en torre médica de Centro Sur",
+      "texto": "Tu consulta donde ya llegan los pacientes. Consultorio en renta en Momentum Centro Sur, sobre Av. Fray Luis de León: torre médica con hospital y servicios de salud en el complejo, estacionamiento, elevadores y control de acceso. Ideal para médicos y especialistas.",
+      "descripcion": "Av. Fray Luis de León · Entorno médico profesional",
+      "datos": [
+        "Torre médica con hospital",
+        "Estacionamiento",
+        "Elevadores",
+        "Control de acceso"
+      ],
+      "marketplace": "https://www.facebook.com/marketplace/item/28195121803450355",
+      "carrusel": [
+        "fotos/01.jpg",
+        "fotos/02.jpg",
+        "fotos/03.jpg",
+        "fotos/04.jpg",
+        "fotos/05.jpg",
+        "fotos/06.jpg",
+        "fotos/07.jpg",
+        "fotos/08.jpg",
+        "fotos/09.jpg",
+        "fotos/10.jpg",
+        "fotos/11.jpg"
+      ],
+      "utm_medium": "facebook-marketplace",
+      "wa_corto_base": "https://propiedades-mederos.s.gy/renta-consultorio-momentum",
+      "grupos": {
+        "casas-departamentos-venta-renta": "CASAS Y DEPARTAMENTOS EN VENTA Y RENTA EN QUERETARO",
+        "locales-queretaro": "Locales Querétaro",
+        "locales-renta-venta-queretaro": "Locales en Renta y Venta Queretaro",
+        "renta-departamentos-queretaro": "Renta Departamentos Queretaro",
+        "renta-locales-queretaro": "Renta locales Querétaro",
+        "renta-loft-departamentos-cuartos": "Renta de Loft, Departamentos, Cuartos y Casas en Querétaro",
+        "renta-venta-casas-departamentos": "RENTA Y VENTA DE CASAS Y DEPARTAMENTOS QUERÉTARO",
+        "rentas-directas-queretaro": "RENTAS DIRECTAS en Querétaro",
+        "rentas-en-queretaro": "Rentas en Querétaro",
+        "rentas-queretaro": "Rentas Querétaro",
+        "venta-renta-casas-locales": "Venta y renta de casas, locales y departamentos en Querétaro y alrededores",
+        "venta-renta-casas-queretaro": "Venta y Renta de Casas en Querétaro",
+        "venta-renta-inmuebles-queretaro": "Venta y Renta Inmuebles en Queretaro"
+      }
     }
   ]
 }

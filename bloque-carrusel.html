@@ -1,0 +1,17 @@
+  <div class="carrusel" id="carrusel">
+    <div class="carrusel-pista" id="pista">{{imgs}}</div>
+    <span class="carrusel-cont" id="cont">1 / {{n}}</span>
+    <button type="button" class="ant" aria-label="Foto anterior">‹</button>
+    <button type="button" class="sig" aria-label="Foto siguiente">›</button>
+    <p class="carrusel-nota">Desliza para ver las {{n}} fotos</p>
+  </div>
+  <script>
+(function(){ // carrusel: contador y flechas
+  var p=document.getElementById("pista"), c=document.getElementById("cont"), n={{n}};
+  function i(){return Math.round(p.scrollLeft/p.clientWidth);}
+  p.addEventListener("scroll",function(){c.textContent=(i()+1)+" / "+n;},{passive:true});
+  function ir(d){p.scrollTo({left:Math.max(0,Math.min(n-1,i()+d))*p.clientWidth,behavior:"smooth"});}
+  document.querySelector("#carrusel .ant").onclick=function(){ir(-1)};
+  document.querySelector("#carrusel .sig").onclick=function(){ir(1)};
+})();
+</script>

@@ -1,0 +1,12 @@
+  <div class="video">
+    <iframe id="fbvideo" data-href="{{video_enc}}" src="https://www.facebook.com/plugins/video.php?href={{video_enc}}&show_text=false&width=320&height=569" loading="lazy" scrolling="no" allow="autoplay; encrypted-media; picture-in-picture; web-share" allowfullscreen title="Video de la propiedad"></iframe>
+  </div>
+  <script>
+(function(){ // pide al reproductor de Facebook el tamaño exacto del recuadro (9:16) para que no recorte el video
+  var f=document.getElementById("fbvideo"); if(!f) return;
+  var w=Math.round(f.parentNode.getBoundingClientRect().width), h=Math.round(w*16/9);
+  if(w>0) f.src="https://www.facebook.com/plugins/video.php?href="+f.getAttribute("data-href")+"&show_text=false&width="+w+"&height="+h;
+})();
+</script>
+  <a class="vlink" href="{{video}}" target="_blank" rel="noopener">¿No carga? Ver el video en Facebook</a>
+

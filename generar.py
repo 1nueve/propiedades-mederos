@@ -9,6 +9,8 @@ BASE = Path(__file__).parent
 cfg_all = json.loads((BASE / "propiedades.json").read_text(encoding="utf-8"))
 cfg, props = cfg_all["config"], cfg_all["propiedades"]
 tpl = (BASE / "plantilla.html").read_text(encoding="utf-8")
+BLOQUE_VIDEO = (BASE / "bloque-video.html").read_text(encoding="utf-8")
+BLOQUE_CARRUSEL = (BASE / "bloque-carrusel.html").read_text(encoding="utf-8")
 dom = cfg["dominio"].rstrip("/")
 a = cfg.get("asesora")
 def tarjeta_asesora():
@@ -34,7 +36,18 @@ for p in props:
     renta = "renta" in p["operacion"].lower()
     precio = "${:,.0f}".format(p["precio"])
     og_title = f"{'Renta' if renta else 'Venta'} {precio}{'/mes' if renta else ''} · {p['tipo']} en {p['zona']}"
-    og_desc = f"▶️ {p['titulo']}. {p['descripcion']}. Mira el video y pide informes por WhatsApp."
+    if p.get("video"):
+        og_desc = f"▶️ {p['titulo']}. {p['descripcion']}. Mira el video y pide informes por WhatsApp."
+    else:
+        og_desc = f"📷 {p['titulo']}. {p['descripcion']}. Mira las {len(p['carrusel'])} fotos y pide informes por WhatsApp."
+    e = html.escape
+    if p.get("video"):
+        medio = (BLOQUE_VIDEO.replace("{{video_enc}}", up.quote(p["video"], safe=""))
+                             .replace("{{video}}", e(p["video"])))
+    else:
+        fotos_c = p["carrusel"]
+        imgs = "".join(f'<img src="../{e(f)}" alt="Foto {k+1} de {e(p["tipo"])} en {e(p["zona"])}"' + (' loading="lazy"' if k else "") + ">" for k, f in enumerate(fotos_c))
+        medio = BLOQUE_CARRUSEL.replace("{{imgs}}", imgs).replace("{{n}}", str(len(fotos_c)))
     campaign = f"{p['id']}-{p['slug']}"
     for gslug, gnombre in p["grupos"].items():
         url = f"{dom}/{ref}/{gslug}/"
@@ -54,7 +67,7 @@ for p in props:
             "utm_campaign": campaign, "wa_url": e(wa), "segundos": int(cfg["segundos_redireccion"]),
             "operacion": e(p["operacion"]), "precio_txt": precio,
             "precio_sufijo": " <small>/ mes</small>" if renta else "",
-            "titulo": e(p["titulo"]), "video": e(p["video"]), "video_enc": up.quote(p["video"], safe=""),
+            "titulo": e(p["titulo"]), "medio": medio,
             "chips": "".join(f"<li>{e(c)}</li>" for c in p["datos"]),
             "texto": e(p["texto"]), "asesora": tarjeta_asesora(),
             "fotos": ('<div class="fotos">' + "".join(f'<img src="../{e(f["archivo"])}" alt="{e(f["alt"])}" loading="lazy">' for f in p.get("fotos", [])) + "</div>") if p.get("fotos") else "", "descripcion": e(p["descripcion"]),

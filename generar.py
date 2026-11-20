@@ -37,7 +37,7 @@ for p in props:
     precio = "${:,.0f}".format(p["precio"])
     if p.get("precio_prefijo"):  # p. ej. "Desde"
         precio = f"{p['precio_prefijo']} {precio}"
-    og_title = f"{'Renta' if renta else 'Venta'} {precio}{'/mes' if renta else ''} · {p['tipo']} en {p['zona']}"
+    og_title = f"{'Renta' if renta else 'Venta'} {precio[0].lower() + precio[1:] if p.get('precio_prefijo') else precio}{'/mes' if renta else ''} · {p['tipo']} en {p['zona']}"
     if p.get("video"):
         og_desc = f"▶️ {p['titulo']}. {p['descripcion']}. Mira el video y pide informes por WhatsApp."
     else:

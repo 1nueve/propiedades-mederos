@@ -3,7 +3,7 @@ frontend:
   phases:
     build:
       commands:
-        - echo "Sitio estático ya generado en /sitio"
+        - echo "Sitio estatico ya generado en /sitio"
   artifacts:
     baseDirectory: sitio
     files:

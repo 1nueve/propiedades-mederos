@@ -35,6 +35,8 @@ for p in props:
     ref = p["id"].lower()
     renta = "renta" in p["operacion"].lower()
     precio = "${:,.0f}".format(p["precio"])
+    if p.get("precio_prefijo"):  # p. ej. "Desde"
+        precio = f"{p['precio_prefijo']} {precio}"
     og_title = f"{'Renta' if renta else 'Venta'} {precio}{'/mes' if renta else ''} · {p['tipo']} en {p['zona']}"
     if p.get("video"):
         og_desc = f"▶️ {p['titulo']}. {p['descripcion']}. Mira el video y pide informes por WhatsApp."

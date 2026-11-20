@@ -22,10 +22,12 @@ im = Image.alpha_composite(im.convert("RGBA"), ov).convert("RGB"); d = ImageDraw
 renta = "renta" in p["operacion"].lower()
 precio = "${:,.0f}".format(p["precio"]) + ("/mes" if renta else "")
 d.text((60, 60), "PROPIEDADES MEDEROS", font=font("SemiBold", 28), fill="#d6e6f3")
-d.text((60, 130), "Renta" if renta else "Venta", font=font("SemiBold", 40), fill="white")
+d.text((60, 130), ("Renta" if renta else "Venta") + (" · " + p["precio_prefijo"].lower() if p.get("precio_prefijo") else ""), font=font("SemiBold", 40), fill="white")
 d.text((60, 180), precio, font=font("ExtraBold", 86 if len(precio) < 13 else 72), fill="white")
 d.text((60, 295), p["tipo"] + " en", font=font("Medium", 36), fill="white")
-d.text((60, 340), p["zona"], font=font("Bold", 40), fill="white")
+fz = 40
+while fz > 28 and d.textlength(p["zona"], font=font("Bold", fz)) > 680: fz -= 2
+d.text((60, 340), p["zona"], font=font("Bold", fz), fill="white")
 y = 410
 for linea in p.get("datos", [])[:2]:
     d.text((60, y), linea, font=font("Regular", 28), fill="#d6e6f3"); y += 40

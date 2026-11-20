@@ -10,7 +10,8 @@
       "puesto": "Asesora inmobiliaria · Propiedades Mederos",
       "foto": "asesora.jpg",
       "bio": "Te ayudo a encontrar casa, departamento o local en renta o venta en Querétaro. Grabo un recorrido en video de cada propiedad para que la conozcas antes de visitarla. Escríbeme y agendamos tu cita."
-    }
+    },
+    "shortio_dominio": "https://propiedades-mederos.s.gy"
   },
   "propiedades": [
     {
@@ -51,7 +52,8 @@
           "archivo": "foto-1.jpg",
           "alt": "Torres de Luma City, Milenio III"
         }
-      ]
+      ],
+      "wa_corto_base": "https://propiedades-mederos.s.gy/renta-depa-luma-city"
     }
   ]
 }

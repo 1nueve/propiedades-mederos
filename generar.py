@@ -28,6 +28,7 @@ def render(d):
     return out
 
 total = 0
+filas = []
 for p in props:
     ref = p["id"].lower()
     renta = "renta" in p["operacion"].lower()
@@ -40,6 +41,10 @@ for p in props:
         msg = (f"Hola, vi en Facebook el anuncio de {p['tipo']} en {p['zona']} "
                f"(Ref. {p['id']}, grupo: {gnombre}). ¿Me das más información?\n{url}")
         wa = f"https://wa.me/{cfg['whatsapp']}?text={up.quote(msg)}"
+        if p.get("wa_corto_base"):  # botón por short.io (cuenta el clic a WhatsApp)
+            wa = f"{p['wa_corto_base'].rstrip('/')}/{gslug}"
+        if cfg.get("shortio_dominio"):  # enlace corto que se publica en el grupo (cuenta el clic al anuncio)
+            filas.append([url, f"{ref}/{gslug}", f"Anuncio {p['id']} · {gnombre}", f"anuncio,{p['id']}", f"{cfg['shortio_dominio']}/{ref}/{gslug}"])
         e = html.escape
         page = render({
             "og_title": e(og_title), "og_desc": e(og_desc), "url": e(url),
@@ -60,3 +65,8 @@ for p in props:
         total += 1
     print(f"{p['id']}: {len(p['grupos'])} páginas  ->  {dom}/{ref}/<grupo>/")
 print(f"Total: {total} páginas")
+if filas:
+    import csv
+    with open(BASE / "shortio-anuncios.csv", "w", newline="", encoding="utf-8") as fh:
+        w = csv.writer(fh); w.writerow(["original_url", "path", "title", "tags", "enlace_corto"]); w.writerows(filas)
+    print(f"shortio-anuncios.csv: {len(filas)} enlaces de anuncio")

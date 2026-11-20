@@ -1,0 +1,12 @@
+version: 1
+frontend:
+  phases:
+    build:
+      commands:
+        - echo "Sitio estático ya generado en /sitio"
+  artifacts:
+    baseDirectory: sitio
+    files:
+      - '**/*'
+  cache:
+    paths: []

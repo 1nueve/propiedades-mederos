@@ -1,0 +1,57 @@
+{
+  "config": {
+    "dominio": "https://mederos.1nueve.com",
+    "pixel_id": "PIXEL_ID_PENDIENTE",
+    "whatsapp": "524425058800",
+    "segundos_redireccion": 0,
+    "utm_source": "volanteo-digital",
+    "asesora": {
+      "nombre": "Ruth Mederos",
+      "puesto": "Asesora inmobiliaria · Propiedades Mederos",
+      "foto": "asesora.jpg",
+      "bio": "Te ayudo a encontrar casa, departamento o local en renta o venta en Querétaro. Grabo un recorrido en video de cada propiedad para que la conozcas antes de visitarla. Escríbeme y agendamos tu cita."
+    }
+  },
+  "propiedades": [
+    {
+      "id": "R4",
+      "slug": "renta-depa-luma-city",
+      "tipo": "Departamento",
+      "operacion": "Renta mensual",
+      "zona": "Luma City, Milenio III",
+      "precio": 17500,
+      "titulo": "Vive como de vacaciones: depa con vista a la cañada",
+      "texto": "Alberca climatizada, spa, sauna, jacuzzi, cine y gimnasio… sin salir de casa. Departamento en renta en Luma City, Milenio III: 2 recámaras (la principal con baño privado), terraza con vista a la cañada y sala-comedor con balcón.",
+      "descripcion": "Sobre Real de Carretas · Amenidades tipo resort",
+      "datos": [
+        "2 recámaras",
+        "Principal con baño privado",
+        "Terraza con vista a la cañada",
+        "Sala-comedor con balcón"
+      ],
+      "video": "https://www.facebook.com/reel/2328748797894433",
+      "utm_medium": "facebook-reel",
+      "grupos": {
+        "casas-departamentos-venta-renta": "CASAS Y DEPARTAMENTOS EN VENTA Y RENTA EN QUERETARO",
+        "milenio-iii-comerciolocal": "MILENIO III #ComercioLocal",
+        "renta-departamentos-queretaro": "Renta Departamentos Queretaro",
+        "renta-loft-departamentos-cuartos": "Renta de Loft, Departamentos, Cuartos y Casas en Querétaro",
+        "renta-venta-casas-departamentos": "RENTA Y VENTA DE CASAS Y DEPARTAMENTOS QUERÉTARO",
+        "rentas-directas-queretaro": "RENTAS DIRECTAS en Querétaro",
+        "rentas-en-queretaro": "Rentas en Querétaro",
+        "rentas-queretaro": "Rentas Querétaro",
+        "vecinos-milenio-iii-queretaro": "Vecinos Milenio III, Querétaro",
+        "venta-renta-casas-locales": "Venta y renta de casas, locales y departamentos en Querétaro y alrededores",
+        "venta-renta-casas-queretaro": "Venta y Renta de Casas en Querétaro",
+        "venta-renta-inmuebles-queretaro": "Venta y Renta Inmuebles en Queretaro",
+        "venta-renta-propiedades-mirador": "Venta, Renta de propiedades: Mirador, Res. del Parque, Milenio, Zen Life"
+      },
+      "fotos": [
+        {
+          "archivo": "foto-1.jpg",
+          "alt": "Torres de Luma City, Milenio III"
+        }
+      ]
+    }
+  ]
+}

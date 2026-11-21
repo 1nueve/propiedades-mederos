@@ -842,6 +842,113 @@
         "venta-renta-casas-queretaro": "Venta y Renta de Casas en Querétaro",
         "venta-renta-inmuebles-queretaro": "Venta y Renta Inmuebles en Queretaro"
       }
+    },
+    {
+      "id": "R13",
+      "slug": "renta-casa-encinos",
+      "tipo": "Casa",
+      "operacion": "Renta mensual",
+      "zona": "Encinos Residencial, El Marqués",
+      "precio": 9000,
+      "titulo": "Casa en renta $9,000 con mantenimiento incluido",
+      "texto": "¿Trabajas en el Aeropuerto o en los parques industriales de El Marqués? Deja de perder horas en el tráfico. En Encinos Residencial te espera una casa con 2 recámaras con clóset, 1.5 baños, cocina equipada, mosquiteros y protecciones, con mantenimiento incluido.",
+      "descripcion": "Ideal para parejas, profesionistas o familias pequeñas",
+      "datos": [
+        "2 recámaras · 1.5 baños",
+        "Mantenimiento incluido",
+        "Cocina equipada",
+        "Cerca del Aeropuerto"
+      ],
+      "video": "https://www.facebook.com/reel/1661020745416913",
+      "utm_medium": "facebook-reel",
+      "wa_corto_base": "https://propiedades-mederos.s.gy/renta-casa-encinos",
+      "grupos": {
+        "casas-departamentos-venta-renta": "CASAS Y DEPARTAMENTOS EN VENTA Y RENTA EN QUERETARO",
+        "renta-cuartos-depas-casas": "RENTA DE CUARTOS, DEPAS, CASAS EN VILLAS, COLINAS SENDAS, LA PIEDAD Y ALRED",
+        "renta-departamentos-queretaro": "Renta Departamentos Queretaro",
+        "renta-loft-departamentos-cuartos": "Renta de Loft, Departamentos, Cuartos y Casas en Querétaro",
+        "renta-venta-casas-departamentos": "RENTA Y VENTA DE CASAS Y DEPARTAMENTOS QUERÉTARO",
+        "rentas-directas-queretaro": "RENTAS DIRECTAS en Querétaro",
+        "rentas-en-queretaro": "Rentas en Querétaro",
+        "rentas-queretaro": "Rentas Querétaro",
+        "rentas-queretaro-hasta-10mil": "RENTAS EN QUERÉTARO DE NO MAS DE $10,000",
+        "sendas-residencial-marques": "Sendas Residencial El Marqués",
+        "venta-renta-casas-locales": "Venta y renta de casas, locales y departamentos en Querétaro y alrededores",
+        "venta-renta-casas-queretaro": "Venta y Renta de Casas en Querétaro",
+        "venta-renta-inmuebles-queretaro": "Venta y Renta Inmuebles en Queretaro"
+      }
+    },
+    {
+      "id": "V24",
+      "slug": "venta-casa-puerta-real",
+      "tipo": "Casa",
+      "operacion": "Venta",
+      "zona": "Puerta Real, Corregidora",
+      "precio": 4750000,
+      "titulo": "5 recámaras y cochera para 4 autos en Puerta Real",
+      "texto": "¿Ya no caben en casa? Esta casa en Puerta Real, Corregidora tiene 5 recámaras, 434 m² de terreno, patio trasero semitechado en L y cochera para 4 autos. Además, recámara en planta baja con baño privado: perfecta para los abuelos, visitas o home office. Se aceptan créditos.",
+      "descripcion": "La ubicación es lo único que no puedes cambiar después de comprar",
+      "datos": [
+        "5 recámaras",
+        "434 m² de terreno",
+        "Cochera para 4 autos",
+        "Recámara en planta baja"
+      ],
+      "video": "https://www.facebook.com/reel/4153364928300644",
+      "utm_medium": "facebook-reel",
+      "wa_corto_base": "https://propiedades-mederos.s.gy/venta-casa-puerta-real",
+      "grupos": {
+        "casas-departamentos-venta-queretaro": "Casas y departamentos en venta @ Querétaro",
+        "casas-departamentos-venta-renta": "CASAS Y DEPARTAMENTOS EN VENTA Y RENTA EN QUERETARO",
+        "casas-en-venta-en-queretaro": "Casas en venta en Queretaro",
+        "casas-en-venta-queretaro": "Casas en venta Querétaro",
+        "casas-inmuebles-renta-venta-corregidora": "Casas e inmuebles renta y venta en Corregidora Querétaro",
+        "marketplace-corregidora": "Marketplace Corregidora, Qro.",
+        "renta-venta-casas-departamentos": "RENTA Y VENTA DE CASAS Y DEPARTAMENTOS QUERÉTARO",
+        "venta-de-casas-en-queretaro": "Venta De Casas En Queretaro",
+        "venta-de-casas-queretaro": "Venta de Casas Queretaro",
+        "venta-renta-casas-locales": "Venta y renta de casas, locales y departamentos en Querétaro y alrededores",
+        "venta-renta-casas-queretaro": "Venta y Renta de Casas en Querétaro",
+        "venta-renta-inmuebles-queretaro": "Venta y Renta Inmuebles en Queretaro",
+        "ventas-corregidora-terranova-puerta-real": "Ventas correguidora, Terranova, Paseos del bosque, Puerta Real. etc.",
+        "ventas-pueblito-corregidora-queretaro": "Ventas El pueblito Corregidora Querétaro"
+      }
+    },
+    {
+      "id": "V25",
+      "slug": "venta-casa-puerta-navarra",
+      "tipo": "Casa",
+      "operacion": "Venta",
+      "zona": "Puerta Navarra",
+      "precio": 1350000,
+      "titulo": "Casa en Puerta Navarra por $1,350,000 con Infonavit",
+      "texto": "Tranquilidad, seguridad y todo cerca. Casa en Puerta Navarra, al norponiente de Querétaro: 2 recámaras, 1.5 baños, cocineta y patio trasero, en condominio con portón eléctrico y seguridad 24/7. A 2 minutos de Prol. Bernardo Quintana, con plaza, ciclopista, canchas y juegos infantiles a unos pasos. Aceptamos Infonavit y está lista para escriturarse.",
+      "descripcion": "A 15 minutos del Centro de Querétaro",
+      "datos": [
+        "2 recámaras · 1.5 baños",
+        "Seguridad 24/7",
+        "Acepta Infonavit",
+        "Lista para escriturar"
+      ],
+      "video": "https://www.facebook.com/reel/1149392267527973",
+      "utm_medium": "facebook-reel",
+      "wa_corto_base": "https://propiedades-mederos.s.gy/venta-casa-puerta-navarra",
+      "grupos": {
+        "casas-departamentos-venta-renta": "CASAS Y DEPARTAMENTOS EN VENTA Y RENTA EN QUERETARO",
+        "casas-en-venta-en-queretaro": "Casas en venta en Queretaro",
+        "casas-en-venta-queretaro": "Casas en venta Querétaro",
+        "casas-inmuebles-zona-norte": "Casas e inmuebles renta o venta zona norte de Querétaro",
+        "casas-venta-baratas-queretaro": "CASAS EN VENTA BARATAS EN QUERÉTARO",
+        "queretaro-norte-santa-rosa": "Querétaro Norte (santa rosa, Buenavista, Montenegro,Pinto,Jofrito,PieD Gall",
+        "renta-venta-casas-departamentos": "RENTA Y VENTA DE CASAS Y DEPARTAMENTOS QUERÉTARO",
+        "venta-casas-economicas-queretaro": "VENTA DE CASAS ECONÓMICAS EN QUERÉTARO Y SUS ALREDEDORES",
+        "venta-de-casas-en-queretaro": "Venta De Casas En Queretaro",
+        "venta-de-casas-queretaro": "Venta de Casas Queretaro",
+        "venta-renta-casas-locales": "Venta y renta de casas, locales y departamentos en Querétaro y alrededores",
+        "venta-renta-casas-queretaro": "Venta y Renta de Casas en Querétaro",
+        "venta-renta-inmuebles-queretaro": "Venta y Renta Inmuebles en Queretaro",
+        "ventas-carretera-tlacote-vinedos": "Ventas Carretera a tlacote, Viñedos, Sonterra, Centro Queretaro y más"
+      }
     }
   ]
 }

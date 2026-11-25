@@ -57,7 +57,7 @@ for p in props:
         url = f"{dom}/{ref}/{gslug}/"
         if gnombre is None:  # página del sitio (desde el home)
             gnombre = "Sitio web"
-            msg = (f"Hola, vi en su sitio web la {p['tipo'].lower()} en {p['zona']} "
+            msg = (f"Hola, vi en moby.lat la {p['tipo'].lower()} en {p['zona']} "
                    f"(Ref. {p['id']}). ¿Me das más información?\n{url}")
             wa = f"https://wa.me/{cfg['whatsapp']}?text={up.quote(msg)}"
             if p.get("wa_corto_base") and cfg.get("wa_sitio_corto"):  # short.io <base>/ver, si ya se creó
@@ -115,7 +115,7 @@ def home():
             f'<div class="bd"><p class="pr">{pre}{precio}{"<small> / mes</small>" if renta else ""}</p>'
             f'<h2>{e(p["tipo"])} en {e(p["zona"])}</h2><p class="dt">{e(dato)}</p><p class="rf">Ref. {e(p["id"])}</p></div></a></li>')
     n_v = sum(1 for p in disp if "renta" not in p["operacion"].lower())
-    msg = "Hola, vi su sitio web de Propiedades Mederos. ¿Me pueden ayudar a encontrar una propiedad?"
+    msg = "Hola, vi el sitio de Propiedades Mederos en moby.lat. ¿Me pueden ayudar a encontrar una propiedad?"
     wa = f"https://wa.me/{cfg['whatsapp']}?text={up.quote(msg)}"
     foto = f'<img src="{e(a["foto"])}" alt="" width="56" height="56">' if a and a.get("foto") else ""
     out = (BASE / "plantilla-home.html").read_text(encoding="utf-8")

@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="es-MX">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Propiedades Mederos · Casas, departamentos y terrenos en Querétaro</title>
+<meta name="description" content="{{n}} propiedades en venta y renta en Querétaro con recorrido en video o fotos. Escríbenos por WhatsApp.">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="es_MX">
+<meta property="og:site_name" content="Propiedades Mederos">
+<meta property="og:url" content="{{dominio}}/">
+<meta property="og:title" content="Propiedades Mederos · {{n}} propiedades en Querétaro">
+<meta property="og:description" content="Casas, departamentos, terrenos y locales en venta y renta. Mira cada una y pide informes por WhatsApp.">
+<style>
+:root{--bg:#f6f4ef;--card:#fff;--ink:#1d2329;--muted:#5d6670;--line:#e3dfd6;--brand:#123b5c;--wa:#1f9e55;--venta:#123b5c;--renta:#b4561c}
+@media (prefers-color-scheme:dark){:root{--bg:#121518;--card:#1b2025;--ink:#eef0f2;--muted:#a3abb3;--line:#2b3238;--brand:#8fc1e8;--wa:#25b863;--venta:#1f5a88;--renta:#b4561c}}
+*{box-sizing:border-box}html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font:16px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+.wrap{max-width:1120px;margin:0 auto;padding:20px 16px 40px}
+.brand{font-weight:700;letter-spacing:.04em;color:var(--brand);font-size:14px;text-transform:uppercase;margin:0}
+h1{font-size:clamp(24px,5vw,34px);line-height:1.2;margin:6px 0 14px;letter-spacing:-.01em}
+.ase{display:flex;align-items:center;gap:12px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px 14px;margin:0 0 18px}
+.ase img{width:56px;height:56px;border-radius:50%;object-fit:cover;flex:none}
+.ase div{flex:1;min-width:0}.ase b{display:block}.ase span{font-size:13px;color:var(--muted)}
+.wa{display:inline-flex;align-items:center;gap:8px;background:var(--wa);color:#fff;text-decoration:none;font-weight:700;font-size:15px;border-radius:10px;padding:10px 14px;white-space:nowrap}
+@media (max-width:520px){.ase{flex-wrap:wrap}.wa{width:100%;justify-content:center}}
+.filtros{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 16px}
+.filtros button{font:inherit;font-size:14px;font-weight:600;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:999px;padding:6px 14px;cursor:pointer}
+.filtros button[aria-pressed=true]{background:var(--brand);border-color:var(--brand);color:var(--bg)}
+.feed{list-style:none;margin:0;padding:0;display:grid;gap:16px;grid-template-columns:1fr}
+@media (min-width:640px){.feed{grid-template-columns:repeat(2,1fr)}}
+@media (min-width:960px){.feed{grid-template-columns:repeat(3,1fr)}}
+.card{display:block;height:100%;background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden;color:inherit;text-decoration:none;transition:transform .15s,box-shadow .15s}
+.card:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,.12)}
+.ph{position:relative;aspect-ratio:4/3;background:var(--line)}
+.ph img{width:100%;height:100%;object-fit:cover;display:block}
+.op,.md{position:absolute;top:10px;font-size:12px;font-weight:700;border-radius:999px;padding:3px 10px;color:#fff}
+.op{left:10px;text-transform:uppercase;letter-spacing:.04em}.op.v{background:var(--venta)}.op.r{background:var(--renta)}
+.md{right:10px;background:rgba(0,0,0,.6)}
+.bd{padding:12px 14px 14px}
+.pr{font-size:24px;font-weight:800;margin:0;letter-spacing:-.01em}.pr small{font-size:14px;font-weight:600;color:var(--muted)}
+h2{font-size:16px;line-height:1.3;margin:2px 0 4px;font-weight:600}
+.dt{margin:0;font-size:14px;color:var(--muted)}
+.rf{margin:6px 0 0;font-size:12px;color:var(--muted)}
+.creado{text-align:center;font-size:13px;color:var(--muted);margin:32px 0 0}
+.creado a{color:var(--brand);font-weight:600;text-decoration:none}
+[hidden]{display:none!important}
+</style>
+</head>
+<body>
+<main class="wrap">
+  <p class="brand">Propiedades Mederos</p>
+  <h1>Casas, departamentos, terrenos y locales en Querétaro</h1>
+  <section class="ase">{{foto}}<div><b>{{asesora}}</b><span>{{puesto}}</span></div>
+    <a class="wa" href="{{wa}}" rel="noopener"><svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true" fill="currentColor"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2Z"/></svg>Escríbenos</a>
+  </section>
+  <div class="filtros" role="group" aria-label="Filtrar propiedades">
+    <button type="button" data-f="" aria-pressed="true">Todas ({{n}})</button>
+    <button type="button" data-f="venta" aria-pressed="false">Venta ({{n_venta}})</button>
+    <button type="button" data-f="renta" aria-pressed="false">Renta ({{n_renta}})</button>
+  </div>
+  <ul class="feed" id="feed">
+{{tarjetas}}
+  </ul>
+  <p class="creado">Creado con <a href="https://propiedades-mederos.s.gy/moby" target="_blank" rel="noopener">moby.lat</a></p>
+</main>
+<script>
+(function(){
+  var bs = document.querySelectorAll(".filtros button"), items = document.querySelectorAll("#feed li");
+  bs.forEach(function(b){ b.addEventListener("click", function(){
+    var f = b.getAttribute("data-f");
+    bs.forEach(function(x){ x.setAttribute("aria-pressed", x === b ? "true" : "false"); });
+    items.forEach(function(li){ li.hidden = !!f && li.getAttribute("data-op") !== f; });
+  }); });
+})();
+</script>
+</body>
+</html>

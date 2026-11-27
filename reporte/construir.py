@@ -10,7 +10,7 @@ Uso:
   y escribe actualizado.json con la fecha.
 Luego: commit y push a main (Amplify despliega en ~3 min).
 """
-import argparse, csv, json, pathlib, datetime
+import argparse, csv, json, pathlib, datetime, shutil
 
 AQUI = pathlib.Path(__file__).resolve().parent
 CARPETA = "reporte"  # la página lleva noindex
@@ -46,6 +46,7 @@ def main():
     tablero = tablero.replace('<meta name="dash-one-writer">', "")
     html = (AQUI / "envoltura.html").read_text(encoding="utf-8").replace("<!--TABLERO-->", tablero)
     (DESTINO / "index.html").write_text(html, encoding="utf-8")
+    shutil.copy(AQUI / "moby-wordmark.png", DESTINO / "moby-wordmark.png")
 
     cambio = False
     if a.publicaciones:

@@ -35,6 +35,12 @@ body{background:var(--color-bg);color:var(--color-fg);font-family:var(--font-ant
 #dash-root{max-width:1120px;margin:0 auto;padding:32px 16px 48px}
 .dash-skeleton{opacity:.4}
 .rp-fresh{font-size:var(--cds-font-size-caption);color:var(--color-fg-muted);margin:12px 0 0}
+.rp-top{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;padding-bottom:18px;margin-bottom:26px;border-bottom:1px solid var(--color-border-line)}
+.rp-top a{display:inline-flex;line-height:0}
+.rp-top img{height:30px;width:auto}
+.rp-top span{font-size:var(--cds-font-size-caption);color:var(--color-fg-muted)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .rp-top img{filter:invert(1)}}
+:root[data-theme="dark"] .rp-top img{filter:invert(1)}
 .rp-err{max-width:1120px;margin:16px auto;padding:12px 16px;border-radius:8px;border:1px solid var(--color-warn);display:none}
 </style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
@@ -88,6 +94,7 @@ window.dash=(function(){
 <body>
 <p class="rp-err" id="rp-err">No se pudieron cargar los datos. Recarga la página en un momento.</p>
 <div id="dash-root">
+<header class="rp-top"><a href="https://moby.lat/" target="_blank" rel="noopener" aria-label="moby.lat"><img src="moby-wordmark.png" alt="moby" width="75" height="30"></a><span>Reporte preparado por moby.lat</span></header>
 
 <style>
 .md{display:flex;flex-direction:column;gap:var(--cds-gap-xl);font-family:var(--font-anthropic-sans);color:var(--color-fg)}

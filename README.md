@@ -11,7 +11,7 @@ Una página por propiedad y por grupo de Facebook, con tarjeta Open Graph (preci
 Dirección de cada anuncio: `https://mederos.moby.lat/<ref>/<grupo>/` (los UTM los agrega la página sola).
 
 ## Reporte de avance para el cliente
-Copia pública del tablero de publicaciones, sin cuenta de Claude: `https://mederos.moby.lat/reporte-7joz9xz6ff/` (ruta no enlazada y con `noindex`).
+Copia pública del tablero de publicaciones, sin cuenta de Claude: `https://mederos.moby.lat/reporte/` (sin enlace desde el sitio y con `noindex`).
 
 - `reporte/tablero.html`: la página del tablero (misma que el artifact de Claude).
 - `reporte/envoltura.html`: estilos y un mini-entorno que carga los CSV de la carpeta.

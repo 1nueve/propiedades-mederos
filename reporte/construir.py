@@ -13,7 +13,7 @@ Luego: commit y push a main (Amplify despliega en ~3 min).
 import argparse, csv, json, pathlib, datetime
 
 AQUI = pathlib.Path(__file__).resolve().parent
-CARPETA = "reporte-7joz9xz6ff"  # ruta no adivinable; la página lleva noindex
+CARPETA = "reporte"  # la página lleva noindex
 DESTINO = AQUI.parent / "sitio" / CARPETA
 
 COLS_PUB = ["n", "fecha", "hora", "id", "propiedad", "tipo", "formato", "grupo",

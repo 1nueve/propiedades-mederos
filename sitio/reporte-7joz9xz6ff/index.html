@@ -1,0 +1,582 @@
+<!doctype html>
+<html lang="es-MX">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow,noarchive">
+<title>Avance de publicaciones · Propiedades Mederos</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --font-anthropic-sans:Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --font-anthropic-serif:"Source Serif 4",Georgia,serif;
+  --color-bg:#faf9f5;--color-panel:#ffffff;--color-fg:#1f1e1b;--color-fg-muted:#6b6862;--color-border-line:#e4e1d8;--color-warn:#c9861a;
+  --cds-chart-grid:#ebe8df;--cds-chart-muted:#a8a49a;--cds-text-secondary:#6b6862;--cds-border:#dedad0;--cds-surface-popover:#ffffff;--cds-shadow-popover:0 4px 16px rgba(0,0,0,.10);
+  --cds-font-size-caption:13px;--cds-font-size-body:15px;--cds-font-size-heading:19px;--cds-font-weight-medium:600;
+  --cds-gap-sm:8px;--cds-gap-md:14px;--cds-gap-lg:20px;--cds-gap-xl:28px;
+  --cds-pad-md:14px;--cds-pad-lg:18px;--cds-pad-xl:26px;--cds-radius:8px;
+  --s1:#2f6fb0;--s2:#d9822b;--s3:#7a5fb5;--s4:#2e9a6a;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --color-bg:#1c1b19;--color-panel:#252422;--color-fg:#ecebe6;--color-fg-muted:#a3a098;--color-border-line:#3a3935;--color-warn:#e0a640;
+  --cds-chart-grid:#34332f;--cds-chart-muted:#77746c;--cds-text-secondary:#a3a098;--cds-border:#44433e;--cds-surface-popover:#2c2b28;--cds-shadow-popover:0 4px 16px rgba(0,0,0,.4);
+  --s1:#6aa6e6;--s2:#eba35a;--s3:#a78fe0;--s4:#5cc495;
+}}
+:root[data-theme="dark"]{
+  --color-bg:#1c1b19;--color-panel:#252422;--color-fg:#ecebe6;--color-fg-muted:#a3a098;--color-border-line:#3a3935;--color-warn:#e0a640;
+  --cds-chart-grid:#34332f;--cds-chart-muted:#77746c;--cds-text-secondary:#a3a098;--cds-border:#44433e;--cds-surface-popover:#2c2b28;--cds-shadow-popover:0 4px 16px rgba(0,0,0,.4);
+  --s1:#6aa6e6;--s2:#eba35a;--s3:#a78fe0;--s4:#5cc495;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--color-bg);color:var(--color-fg);font-family:var(--font-anthropic-sans);-webkit-text-size-adjust:100%}
+#dash-root{max-width:1120px;margin:0 auto;padding:32px 16px 48px}
+.dash-skeleton{opacity:.4}
+.rp-fresh{font-size:var(--cds-font-size-caption);color:var(--color-fg-muted);margin:12px 0 0}
+.rp-err{max-width:1120px;margin:16px auto;padding:12px 16px;border-radius:8px;border:1px solid var(--color-warn);display:none}
+</style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
+<script>
+/* Mini-entorno que imita al del tablero de Claude: carga los CSV de esta carpeta y redibuja. */
+window.dash=(function(){
+  const css=n=>getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+  const fuentes={publicaciones:'publicaciones.csv',estadisticas:'estadisticas.csv'};
+  const datos={}, calcs={}, draws=[], listeners=[];
+  for(const k in fuentes)datos[k]={status:'loading',data:[]};
+  const api={
+    get colors(){return ['--s1','--s2','--s3','--s4'].map(css);},
+    calc(id,o){calcs[id]=o;},
+    loader(){},
+    draw(name,fn){draws.push([name,fn]);},
+    onData(fn){listeners.push(fn);try{fn();}catch(e){console.error(e);}},
+    data(id){
+      if(datos[id])return datos[id];
+      const c=calcs[id];
+      if(!c)return {status:'missing',data:[]};
+      const ins=c.inputs.map(i=>api.data(i));
+      const bad=ins.find(s=>s.status!=='ok');
+      if(bad)return {status:bad.status,data:null};
+      try{return {status:'ok',data:c.fn(...ins.map(s=>s.data))};}catch(e){console.error(e);return {status:'error',data:null};}
+    },
+    params(){return {};},setParams(){},resetParams(){},refresh(){},setLink(){}
+  };
+  let t=0;
+  function render(){
+    for(const fn of listeners){try{fn();}catch(e){console.error(e);}}
+    for(const [name,fn] of draws)document.querySelectorAll('[data-draw="'+name+'"]').forEach(el=>{try{fn(el);}catch(e){console.error(e);}});
+  }
+  api._render=render;
+  api._cargar=async function(){
+    const v='?v='+Date.now();
+    await Promise.all(Object.entries(fuentes).map(async([id,f])=>{
+      try{const r=await fetch(f+v,{cache:'no-store'});if(!r.ok)throw new Error(r.status);
+        datos[id]={status:'ok',data:d3.csvParse(await r.text())};}
+      catch(e){datos[id]={status:'error',data:[]};document.getElementById('rp-err').style.display='block';}
+    }));
+    try{const r=await fetch('actualizado.json'+v,{cache:'no-store'});if(r.ok){const j=await r.json();const el=document.getElementById('rp-fresh');
+      if(j&&j.at){const d=new Date(j.at);el.textContent='Datos actualizados el '+d.toLocaleString('es-MX',{day:'numeric',month:'long',hour:'numeric',minute:'2-digit',timeZone:'America/Mexico_City'})+' (hora de Querétaro).';}}}catch(e){}
+    render();
+  };
+  window.addEventListener('resize',()=>{clearTimeout(t);t=setTimeout(render,150);});
+  matchMedia('(prefers-color-scheme: dark)').addEventListener?.('change',render);
+  return api;
+})();
+</script>
+</head>
+<body>
+<p class="rp-err" id="rp-err">No se pudieron cargar los datos. Recarga la página en un momento.</p>
+<div id="dash-root">
+
+<style>
+.md{display:flex;flex-direction:column;gap:var(--cds-gap-xl);font-family:var(--font-anthropic-sans);color:var(--color-fg)}
+.md-eyebrow{font-size:var(--cds-font-size-caption);letter-spacing:.08em;text-transform:uppercase;color:var(--color-fg-muted);margin:0}
+.md-title{font-family:var(--font-anthropic-serif);font-weight:400;font-size:clamp(28px,5vw,40px);line-height:1.1;margin:4px 0 0;text-wrap:balance}
+.md-lead{font-size:var(--cds-font-size-body);color:var(--color-fg-muted);margin:8px 0 0;max-width:62ch;line-height:1.5}
+.md-lead b{color:var(--color-fg);font-weight:var(--cds-font-weight-medium)}
+.md-alert{background:color-mix(in srgb,var(--color-warn) 14%,var(--color-bg));border:1px solid color-mix(in srgb,var(--color-warn) 45%,transparent);border-radius:var(--cds-radius);padding:var(--cds-pad-md) var(--cds-pad-lg);margin:0}
+.md-hero{background:var(--color-panel);border:1px solid var(--color-border-line);border-radius:calc(var(--cds-radius) * 2);padding:var(--cds-pad-xl);display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.4fr);gap:var(--cds-gap-xl);align-items:center}
+@media (max-width:640px){.md-hero{grid-template-columns:minmax(0,1fr)}}
+.md-big{font-family:var(--font-anthropic-serif);font-weight:400;font-size:clamp(56px,10vw,88px);line-height:1;font-variant-numeric:tabular-nums;display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}
+.md-big small{font-family:var(--font-anthropic-sans);font-size:var(--cds-font-size-heading);color:var(--color-fg-muted)}
+.md-sub{color:var(--color-fg-muted);margin:6px 0 0;font-size:var(--cds-font-size-body)}
+.md-track{height:18px;border-radius:999px;background:var(--cds-chart-grid);overflow:hidden;display:flex}
+.md-track span{display:block;height:100%}
+.md-pct{display:flex;justify-content:space-between;gap:8px;margin-top:10px;font-size:var(--cds-font-size-caption);color:var(--color-fg-muted);font-variant-numeric:tabular-nums;flex-wrap:wrap}
+.md-legend{display:flex;gap:16px;flex-wrap:wrap;margin-top:12px;font-size:var(--cds-font-size-caption);color:var(--color-fg-muted)}
+.md-legend i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:6px;vertical-align:-1px}
+.md-tiles{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:var(--cds-gap-md)}
+@media (max-width:720px){.md-tiles{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.md-tile{border-top:2px solid var(--color-border-line);padding-top:var(--cds-pad-md)}
+.md-tile p{margin:0}
+.md-tile .v{font-family:var(--font-anthropic-serif);font-size:34px;line-height:1.1;font-variant-numeric:tabular-nums;margin-top:6px}
+.md-tile .v small{font-family:var(--font-anthropic-sans);font-size:var(--cds-font-size-body);color:var(--color-fg-muted)}
+.md-tile .n{font-size:var(--cds-font-size-caption);color:var(--color-fg-muted);margin-top:2px}
+.md-sec h2{font-size:var(--cds-font-size-heading);font-weight:var(--cds-font-weight-medium);margin:0}
+.md-sec .md-note{margin:4px 0 var(--cds-gap-md);color:var(--color-fg-muted);font-size:var(--cds-font-size-caption)}
+.md-chart{position:relative;min-height:220px}
+.md-chart svg text{fill:var(--cds-text-secondary);font-size:var(--cds-font-size-caption)}
+.md-tip{position:absolute;pointer-events:none;background:var(--cds-surface-popover);border:1px solid var(--cds-border);box-shadow:var(--cds-shadow-popover);border-radius:var(--cds-radius);padding:6px 10px;font-size:var(--cds-font-size-caption);white-space:nowrap;z-index:2}
+.md-props{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:var(--cds-gap-sm) var(--cds-gap-xl)}
+.md-props li{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:4px 12px;padding:10px 0;border-bottom:1px solid var(--color-border-line);min-width:0}
+.md-props .name{font-weight:var(--cds-font-weight-medium);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.md-id{display:inline-block;font-variant-numeric:tabular-nums;font-size:11px;font-weight:var(--cds-font-weight-medium);letter-spacing:.04em;padding:1px 6px;margin-right:8px;border-radius:4px;background:var(--cds-chart-grid);color:var(--color-fg);vertical-align:1px}
+.md-props .cnt{font-variant-numeric:tabular-nums;color:var(--color-fg-muted);font-size:var(--cds-font-size-caption);align-self:center}
+.md-props .bar{grid-column:1/-1;height:6px;border-radius:999px;background:var(--cds-chart-grid);overflow:hidden}
+.md-props .bar span{display:block;height:100%;border-radius:999px}
+.md-chips{grid-column:1/-1;display:flex;gap:6px}
+.md-chip{font-size:11px;letter-spacing:.03em;padding:1px 8px;border-radius:999px;border:1px solid var(--color-border-line);color:var(--color-fg-muted)}
+.md-chip.reel{color:var(--color-fg);border-color:currentColor}
+.md-tablewrap{overflow-x:auto}
+.md-table{width:100%;border-collapse:collapse;font-size:var(--cds-font-size-body)}
+.md-table th{text-align:left;font-weight:var(--cds-font-weight-medium);font-size:var(--cds-font-size-caption);color:var(--color-fg-muted);text-transform:uppercase;letter-spacing:.05em;padding:8px 10px;border-bottom:1px solid var(--color-border-line);white-space:nowrap}
+.md-table td{padding:10px;border-bottom:1px solid var(--color-border-line);vertical-align:top}
+.md-table td.t{white-space:nowrap;font-variant-numeric:tabular-nums;color:var(--color-fg-muted)}
+.md-table a{color:inherit}
+.md-empty{color:var(--color-fg-muted);font-size:var(--cds-font-size-body);margin:0}
+.md-two{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--cds-gap-xl)}
+@media (max-width:860px){.md-two{grid-template-columns:minmax(0,1fr)}}
+.md-foot{font-size:var(--cds-font-size-caption);color:var(--color-fg-muted);margin:0}
+.md-states{display:flex;flex-wrap:wrap;gap:6px 16px;margin:10px 0 0;font-size:var(--cds-font-size-caption);color:var(--color-fg-muted)}
+.md-states b{color:var(--color-fg);font-variant-numeric:tabular-nums;font-weight:var(--cds-font-weight-medium)}
+.md-reach{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--cds-gap-md);margin-bottom:var(--cds-gap-lg)}
+@media (max-width:560px){.md-reach{grid-template-columns:minmax(0,1fr)}}
+.md-reach .md-tile .v{font-size:30px}
+.md-table td.num,.md-table th.num{text-align:right;font-variant-numeric:tabular-nums}
+.md-notes{margin:var(--cds-gap-md) 0 0;padding-left:18px;color:var(--color-fg-muted);font-size:var(--cds-font-size-caption);line-height:1.6;max-width:80ch}
+.md-band{--k:var(--cds-chart-muted);display:flex;flex-direction:column;gap:var(--cds-gap-xl);padding:var(--cds-pad-xl);border-radius:calc(var(--cds-radius) * 2);background:color-mix(in srgb,var(--k) 7%,var(--color-bg));border:1px solid color-mix(in srgb,var(--k) 30%,transparent);border-left:5px solid var(--k);min-width:0}
+@media (max-width:560px){.md-band{padding:var(--cds-pad-md)}}
+.md-band.prog{background:transparent;border-style:dashed;border-left-style:solid}
+.md-band-head{display:flex;flex-wrap:wrap;align-items:center;gap:6px 12px}
+.md-kind{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:var(--cds-font-weight-medium);letter-spacing:.08em;text-transform:uppercase;padding:3px 10px;border-radius:999px;background:color-mix(in srgb,var(--k) 18%,var(--color-bg));color:var(--color-fg)}
+.md-kind::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--k)}
+.md-band-head p{margin:0;font-size:var(--cds-font-size-caption);color:var(--color-fg-muted)}
+.md-key{display:flex;flex-wrap:wrap;gap:8px 10px;margin-top:14px}
+.md-key .md-kind{font-size:10px}
+.md-rank{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px}
+.md-rank li{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:3px 10px;font-size:var(--cds-font-size-body)}
+.md-rank .nm{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.md-rank .ct{font-variant-numeric:tabular-nums;color:var(--color-fg-muted);font-size:var(--cds-font-size-caption);align-self:center}
+.md-rank .bar{grid-column:1/-1;height:6px;border-radius:999px;background:color-mix(in srgb,var(--k) 14%,var(--color-bg));overflow:hidden}
+.md-rank .bar span{display:block;height:100%;border-radius:999px;background:var(--k)}
+.md-three h3{margin-bottom:8px}
+.md-three{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:var(--cds-gap-xl)}
+@media (max-width:860px){.md-three{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:560px){.md-three{grid-template-columns:minmax(0,1fr)}}
+.md-days{display:flex;align-items:flex-end;gap:4px;height:120px;padding-top:8px;border-bottom:1px solid var(--color-border-line)}
+.md-days div{flex:1;min-width:6px;background:var(--k);border-radius:3px 3px 0 0;position:relative}
+.md-days-x{display:flex;justify-content:space-between;font-size:var(--cds-font-size-caption);color:var(--color-fg-muted);margin-top:4px}
+</style>
+
+<div class="md" lang="es-MX" data-read>
+  <header id="encabezado">
+    <p class="md-eyebrow">Propiedades Mederos · Difusión en grupos de Facebook</p>
+    <h1 class="md-title">Avance de publicaciones</h1>
+    <p class="md-lead" id="frase-inicio">El plan arranca el <b data-draw="inicio" data-source="resumen" data-field="inicio" data-row="0">—</b> y termina el <b data-draw="fin" data-source="resumen" data-field="fin" data-row="0">—</b>. Aquí verás cada publicación en cuanto salga.</p>
+    <p class="md-lead" id="frase-curso" hidden>Llevamos <b data-draw="pct2" data-source="resumen" data-field="avance" data-row="0">—</b>% del plan. Ya salieron <b data-draw="pub2" data-source="resumen" data-field="publicadas" data-row="0">—</b> publicaciones en <b data-draw="gru2" data-source="resumen" data-field="grupos" data-row="0">—</b> grupos, y el plan termina el <b data-draw="fin2" data-source="resumen" data-field="fin" data-row="0">—</b>.</p>
+    <p class="md-lead" id="frase-fin" hidden>El plan está completo: salieron todas las publicaciones programadas.</p>
+    <div class="md-key" aria-label="Tipos de datos"><span class="md-kind" data-k="real" style="--k:var(--cds-chart-muted)">Real</span><span class="md-kind" data-k="est" style="--k:var(--cds-chart-muted)">Estimado</span><span class="md-kind" data-k="wa" style="--k:var(--cds-chart-muted)">Medido</span><span class="md-kind" data-k="prog" style="--k:var(--cds-chart-muted)">Programado</span></div>
+  </header>
+
+  <p class="md-alert" id="aviso" hidden><b>Publicaciones en pausa.</b> Facebook mostró un aviso y detuvimos las publicaciones para cuidar la cuenta. Te avisamos en cuanto se reanuden.</p>
+
+  <div class="md-band real" data-kind="real">
+    <div class="md-band-head"><span class="md-kind">Real</span><p>Lo que ya se publicó en los grupos, registrado una por una.</p></div>
+  <section class="md-hero" id="avance">
+    <div>
+      <p class="md-eyebrow">Publicaciones hechas</p>
+      <div class="md-big"><span data-draw="publicadas" data-source="resumen" data-field="publicadas" data-row="0">—</span><small>de <span data-draw="total" data-source="resumen" data-field="total" data-row="0">—</span></small></div>
+      <p class="md-states"><span><b data-draw="visibles" data-source="resumen" data-field="visibles" data-row="0">—</b> ya visibles</span><span><b data-draw="aprobacion" data-source="resumen" data-field="aprobacion" data-row="0">—</b> esperando aprobación</span><span><b data-draw="omitidas" data-source="resumen" data-field="omitidas" data-row="0">—</b> omitidas por reglas del grupo</span><span><b data-draw="pendientes" data-source="resumen" data-field="pendientes" data-row="0">—</b> pendientes</span></p>
+    </div>
+    <div>
+      <div class="md-track" data-draw="barra" data-source="resumen" role="img" aria-label="Barra de avance del plan"></div>
+      <div class="md-pct"><span><span data-draw="pct" data-source="resumen" data-field="avance" data-row="0">—</span>% completado</span><span>Meta: <span data-draw="total2" data-source="resumen" data-field="total" data-row="0">—</span> publicaciones</span></div>
+      <div class="md-legend"><span><i data-draw="sw-reel"></i>Visible en el grupo</span><span><i data-draw="sw-mp"></i>Esperando aprobación</span><span><i style="background:var(--cds-chart-muted)"></i>Omitida por reglas</span><span><i style="background:var(--cds-chart-grid)"></i>Pendiente</span></div>
+    </div>
+  </section>
+
+  <section class="md-tiles" id="cifras">
+    <div class="md-tile"><p class="md-eyebrow">Grupos alcanzados</p><p class="v"><span data-draw="grupos" data-source="resumen" data-field="grupos" data-row="0">—</span> <small>de <span data-draw="grupos_plan" data-source="resumen" data-field="grupos_plan" data-row="0">—</span></small></p><p class="n">grupos de Querétaro</p></div>
+    <div class="md-tile"><p class="md-eyebrow">Propiedades</p><p class="v"><span data-draw="props_pub" data-source="resumen" data-field="props_publicadas" data-row="0">—</span> <small>de <span data-draw="props" data-source="resumen" data-field="propiedades" data-row="0">—</span></small></p><p class="n">ya publicadas al menos una vez</p></div>
+    <div class="md-tile"><p class="md-eyebrow">Con video</p><p class="v"><span data-draw="reels" data-source="resumen" data-field="reels" data-row="0">—</span> <small>de <span data-draw="reels_plan" data-source="resumen" data-field="reels_plan" data-row="0">—</span></small></p><p class="n">publicaciones con reel</p></div>
+    <div class="md-tile"><p class="md-eyebrow">Hoy</p><p class="v"><span data-draw="hoy" data-source="por_dia">—</span></p><p class="n">publicaciones programadas para hoy</p></div>
+  </section>
+
+  </div>
+
+  <div class="md-band est" data-kind="est">
+    <div class="md-band-head"><span class="md-kind">Estimado</span><p>Cálculo aproximado a partir de los miembros de cada grupo. No es una medición de Facebook.</p></div>
+  <section class="md-sec" id="alcance">
+    <h2>Alcance estimado</h2>
+    <p class="md-note">Miembros de los grupos donde ya salió al menos una publicación.</p>
+    <div class="md-reach">
+      <div class="md-tile"><p class="md-eyebrow">Miembros en grupos ya visibles</p><p class="v" data-draw="mem-vis" data-source="resumen" data-field="miembros_visibles" data-row="0">—</p></div>
+      <div class="md-tile"><p class="md-eyebrow">Miembros, sumando los que esperan aprobación</p><p class="v" data-draw="mem-hechas" data-source="resumen" data-field="miembros_hechas" data-row="0">—</p></div>
+    </div>
+    <div class="md-two">
+      <div>
+        <h3 class="md-eyebrow">Vistas estimadas de las publicaciones</h3>
+        <div class="md-tablewrap">
+          <table class="md-table" data-source="alcance" data-row-key="escenario">
+            <thead><tr><th data-field="escenario">Escenario</th><th class="num" data-field="porcentaje">% de miembros que la ve</th><th class="num" data-field="vistas_hoy">Visibles hoy</th><th class="num" data-field="vistas_si_aprueban">Si aprueban todas</th></tr></thead>
+            <tbody data-draw="tabla-alcance"></tbody>
+          </table>
+        </div>
+      </div>
+      <div>
+        <h3 class="md-eyebrow">Por tipo de grupo</h3>
+        <div class="md-tablewrap">
+          <table class="md-table" data-source="por_tipo_grupo" data-row-key="tipo_grupo">
+            <thead><tr><th data-field="tipo_grupo">Tipo de grupo</th><th class="num" data-field="grupos">Grupos</th><th class="num" data-field="miembros">Miembros</th><th class="num" data-field="hechas">Hechas</th></tr></thead>
+            <tbody data-draw="tabla-tipos"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <ul class="md-notes">
+      <li>Miembros no es lo mismo que personas alcanzadas: en grupos grandes Facebook muestra cada publicación solo a una parte de los miembros, normalmente entre 1 y 5 %.</li>
+      <li>Muchas personas están en varios grupos a la vez y pueden ver más de una publicación, así que las personas únicas son menos que las vistas.</li>
+      <li>Las publicaciones que esperan aprobación no las ve nadie hasta que un administrador las aprueba.</li>
+      <li>Las reproducciones reales de cada video están en el reel, en «Ver estadísticas» de la página de Facebook.</li>
+    </ul>
+  </section>
+
+  </div>
+
+  <div class="md-band wa" data-kind="wa">
+    <div class="md-band-head"><span class="md-kind">Medido</span><p>Clics reales al enlace de WhatsApp de cada publicación, contados por short.io.</p></div>
+  <section class="md-sec" id="whatsapp">
+    <h2>Contactos por WhatsApp</h2>
+    <p class="md-note">Cada publicación lleva su propio enlace de WhatsApp. Aquí contamos cuántas personas lo abrieron, por propiedad y por grupo.</p>
+    <div class="md-reach">
+      <div class="md-tile"><p class="md-eyebrow">Clics al enlace de WhatsApp</p><p class="v" data-draw="clics-total" data-source="resumen" data-field="clics" data-row="0">—</p></div>
+      <div class="md-tile"><p class="md-eyebrow">Publicaciones con al menos un clic</p><p class="v" data-draw="clics-posts" data-source="resumen" data-field="posts_con_clics" data-row="0">—</p></div>
+    </div>
+    <div class="md-two">
+      <div>
+        <h3 class="md-eyebrow">Por propiedad</h3>
+        <div class="md-tablewrap">
+          <table class="md-table" data-source="clics_propiedad" data-row-key="id">
+            <thead><tr><th data-field="id">ID</th><th data-field="propiedad">Propiedad</th><th class="num" data-field="clics">Clics</th></tr></thead>
+            <tbody data-draw="tabla-clics-prop"></tbody>
+          </table>
+        </div>
+      </div>
+      <div>
+        <h3 class="md-eyebrow">Grupos que más contactos dan</h3>
+        <div class="md-tablewrap">
+          <table class="md-table" data-source="clics_grupo" data-row-key="grupo">
+            <thead><tr><th data-field="grupo">Grupo</th><th class="num" data-field="publicaciones">Publicaciones</th><th class="num" data-field="clics">Clics</th></tr></thead>
+            <tbody data-draw="tabla-clics-grupo"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <h3 class="md-eyebrow" style="margin-top:var(--cds-gap-lg)">Clics por día</h3>
+    <div data-draw="est-dias" data-source="estadisticas"></div>
+    <div class="md-three" style="margin-top:var(--cds-gap-lg)">
+      <div><h3 class="md-eyebrow">Ciudades</h3><ul class="md-rank" data-draw="est-ciudad" data-source="estadisticas"></ul></div>
+      <div><h3 class="md-eyebrow">Celular o computadora</h3><ul class="md-rank" data-draw="est-dispositivo" data-source="estadisticas"></ul><h3 class="md-eyebrow" style="margin-top:var(--cds-gap-md)">Sistema</h3><ul class="md-rank" data-draw="est-sistema" data-source="estadisticas"></ul></div>
+      <div><h3 class="md-eyebrow">Navegador</h3><ul class="md-rank" data-draw="est-navegador" data-source="estadisticas"></ul></div>
+      <div><h3 class="md-eyebrow">Fuente (UTM)</h3><ul class="md-rank" data-draw="est-fuente" data-source="estadisticas"></ul><h3 class="md-eyebrow" style="margin-top:var(--cds-gap-md)">Medio (UTM)</h3><ul class="md-rank" data-draw="est-medio" data-source="estadisticas"></ul></div>
+      <div style="grid-column:span 2"><h3 class="md-eyebrow">Campaña por propiedad (UTM)</h3><ul class="md-rank" data-draw="est-campana" data-source="estadisticas"></ul></div>
+    </div>
+    <ul class="md-notes">
+      <li>Un clic es alguien que abrió WhatsApp desde la publicación. El mensaje ya trae escrita la propiedad y el grupo, así que también se reconoce en el chat.</li>
+      <li>Los clics y las estadísticas vienen de short.io y se actualizan al terminar cada tanda de publicaciones. Fuente «volanteo-digital» identifica los clics que llegan por nuestros enlaces.</li>
+    </ul>
+  </section>
+
+  </div>
+
+  <div class="md-band real" data-kind="real">
+    <div class="md-band-head"><span class="md-kind">Real</span><p>Avance día por día y por propiedad.</p></div>
+  <section class="md-sec" id="por-dia">
+    <h2>Publicaciones por día</h2>
+    <p class="md-note">Barra clara: lo programado. Barra de color: lo que ya se publicó (visible o esperando aprobación).</p>
+    <div class="md-chart" data-draw="chart-dias" data-source="por_dia"></div>
+  </section>
+
+  <section class="md-sec" id="por-propiedad">
+    <h2>Avance por propiedad</h2>
+    <p class="md-note">Cuántos de sus grupos asignados ya tienen la publicación.</p>
+    <ul class="md-props" data-draw="props-list" data-source="por_propiedad"></ul>
+  </section>
+
+    <section class="md-sec" id="ultimas">
+      <h2>Últimas publicaciones</h2>
+      <p class="md-note">Con «Abrir» ves la publicación en Facebook.</p>
+      <p class="md-empty" id="sin-publicadas">Todavía no hay publicaciones. La primera sale el día de arranque a la 1:00 p. m.</p>
+      <div class="md-tablewrap">
+        <table class="md-table" data-source="publicaciones" data-row-key="n">
+          <thead><tr><th data-field="fecha">Fecha</th><th data-field="propiedad">Propiedad</th><th data-field="grupo">Grupo</th><th data-field="estado">Estado</th><th data-field="enlace_post">Ver</th></tr></thead>
+          <tbody data-draw="tabla-ultimas"></tbody>
+        </table>
+      </div>
+    </section>
+  </div>
+
+  <div class="md-band prog" data-kind="prog">
+    <div class="md-band-head"><span class="md-kind">Programado</span><p>Lo que viene en el calendario. Puede moverse si un grupo cambia sus reglas.</p></div>
+    <section class="md-sec" id="proximas">
+      <h2>Próximas en el calendario</h2>
+      <p class="md-note">Las siguientes publicaciones programadas.</p>
+      <div class="md-tablewrap">
+        <table class="md-table" data-source="publicaciones" data-row-key="n">
+          <thead><tr><th data-field="fecha">Fecha</th><th data-field="hora">Hora</th><th data-field="propiedad">Propiedad</th><th data-field="grupo">Grupo</th></tr></thead>
+          <tbody data-draw="tabla-proximas"></tbody>
+        </table>
+      </div>
+    </section>
+  </div>
+
+  <p class="md-foot">Se actualiza al terminar cada tanda de publicaciones. Antes de publicar revisamos las reglas de cada grupo.</p>
+</div>
+
+<script>
+window.MD = (function(){
+  const MES=['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];
+  const fecha=s=>{if(!s)return '—';const p=s.split('-');return `${+p[2]} ${MES[+p[1]-1]}`;};
+  const fechaLarga=s=>{if(!s)return '—';const p=s.split('-');const M=['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];return `${+p[2]} de ${M[+p[1]-1]}`;};
+  const hoyISO=()=>{const d=new Date();const z=n=>String(n).padStart(2,'0');return `${d.getFullYear()}-${z(d.getMonth()+1)}-${z(d.getDate())}`;};
+  const nf=new Intl.NumberFormat('es-MX');
+  return {fecha,fechaLarga,hoyISO,nf,REEL:()=>dash.colors[0],MP:()=>dash.colors[1]||dash.colors[0]};
+})();
+
+dash.calc('resumen',{inputs:['publicaciones'],title:'Resumen del avance',description:'Totales del plan: publicadas, pendientes, grupos y propiedades.',fn:(publicaciones)=>{
+  const vis=publicaciones.filter(r=>r.estado==='Publicada');
+  const apr=publicaciones.filter(r=>r.estado==='En aprobación');
+  const omi=publicaciones.filter(r=>r.estado==='Omitida');
+  const pub=vis.concat(apr);
+  const fechas=publicaciones.map(r=>r.fecha).filter(Boolean).sort();
+  const total=publicaciones.length;
+  const miembros=rows=>{const m=new Map();for(const r of rows)m.set(r.grupo,Number(r.miembros)||0);let s=0;for(const v of m.values())s+=v;return s;};
+  return [{
+    total,
+    publicadas:pub.length,
+    visibles:vis.length,
+    aprobacion:apr.length,
+    omitidas:omi.length,
+    pendientes:publicaciones.filter(r=>r.estado==='Pendiente').length,
+    pausadas:publicaciones.filter(r=>r.estado==='Pausada').length,
+    avance: total?Math.round((pub.length+omi.length)/total*100):0,
+    miembros_visibles:miembros(vis),
+    miembros_hechas:miembros(pub),
+    reels:pub.filter(r=>r.formato==='Reel').length,
+    reels_plan:publicaciones.filter(r=>r.formato==='Reel').length,
+    grupos:new Set(pub.map(r=>r.grupo)).size,
+    grupos_plan:new Set(publicaciones.map(r=>r.grupo)).size,
+    propiedades:new Set(publicaciones.map(r=>r.id)).size,
+    props_publicadas:new Set(pub.map(r=>r.id)).size,
+    inicio:fechas[0]||'',
+    fin:fechas[fechas.length-1]||'',
+    clics:publicaciones.reduce((s,r)=>s+(Number(r.clics)||0),0),
+    posts_con_clics:publicaciones.filter(r=>Number(r.clics)>0).length
+  }];
+}});
+
+dash.calc('alcance',{inputs:['publicaciones'],title:'Vistas estimadas',description:'Suma de miembros del grupo de cada publicación, por el porcentaje de miembros que suele verla.',fn:(publicaciones)=>{
+  const suma=est=>publicaciones.filter(r=>est.includes(r.estado)).reduce((s,r)=>s+(Number(r.miembros)||0),0);
+  const hoy=suma(['Publicada']), todas=suma(['Publicada','En aprobación']);
+  return [['Conservador',1],['Medio',3],['Optimista',5]].map(([escenario,porcentaje])=>({escenario,porcentaje,vistas_hoy:Math.round(hoy*porcentaje/100),vistas_si_aprueban:Math.round(todas*porcentaje/100)}));
+}});
+
+dash.calc('por_tipo_grupo',{inputs:['publicaciones'],title:'Por tipo de grupo',description:'Grupos, miembros y publicaciones hechas según el tipo de grupo.',fn:(publicaciones)=>{
+  const m=new Map();
+  for(const r of publicaciones){const t=m.get(r.tipo_grupo)||{tipo_grupo:r.tipo_grupo,g:new Map(),hechas:0};t.g.set(r.grupo,Number(r.miembros)||0);if(r.estado==='Publicada'||r.estado==='En aprobación')t.hechas++;m.set(r.tipo_grupo,t);}
+  return [...m.values()].map(t=>({tipo_grupo:t.tipo_grupo,grupos:t.g.size,miembros:[...t.g.values()].reduce((a,b)=>a+b,0),hechas:t.hechas})).sort((a,b)=>b.miembros-a.miembros);
+}});
+
+dash.calc('por_dia',{inputs:['publicaciones'],title:'Publicaciones por día',description:'Programadas y publicadas en cada día del plan.',fn:(publicaciones)=>{
+  const m=new Map();
+  for(const r of publicaciones){const d=m.get(r.fecha)||{fecha:r.fecha,programadas:0,publicadas:0};d.programadas++;if(r.estado==='Publicada'||r.estado==='En aprobación')d.publicadas++;m.set(r.fecha,d);}
+  return [...m.values()].sort((a,b)=>a.fecha<b.fecha?-1:1);
+}});
+
+dash.calc('por_propiedad',{inputs:['publicaciones'],title:'Avance por propiedad',description:'Grupos asignados y publicados de cada propiedad.',fn:(publicaciones)=>{
+  const m=new Map();
+  for(const r of publicaciones){const p=m.get(r.id)||{id:r.id,propiedad:r.propiedad,tipo:r.tipo,formato:r.formato,total:0,publicadas:0};p.total++;if(r.estado==='Publicada'||r.estado==='En aprobación')p.publicadas++;m.set(r.id,p);}
+  return [...m.values()].map(p=>({...p,avance:Math.round(p.publicadas/p.total*100)})).sort((a,b)=>(b.avance-a.avance)||(a.formato==='Reel'?-1:1)-(b.formato==='Reel'?-1:1)||(b.total-a.total));
+}});
+
+dash.calc('clics_propiedad',{inputs:['publicaciones'],title:'Clics por propiedad',description:'Clics al enlace de WhatsApp de cada propiedad, sumando todos sus grupos.',fn:(publicaciones)=>{
+  const m=new Map();
+  for(const r of publicaciones){const p=m.get(r.id)||{id:r.id,propiedad:r.propiedad,clics:0};p.clics+=Number(r.clics)||0;m.set(r.id,p);}
+  return [...m.values()].sort((a,b)=>b.clics-a.clics||a.id.localeCompare(b.id));
+}});
+
+dash.calc('clics_grupo',{inputs:['publicaciones'],title:'Clics por grupo',description:'Clics al enlace de WhatsApp desde cada grupo, con las publicaciones ya hechas ahí.',fn:(publicaciones)=>{
+  const m=new Map();
+  for(const r of publicaciones){const g=m.get(r.grupo)||{grupo:r.grupo,publicaciones:0,clics:0};if(r.estado==='Publicada'||r.estado==='En aprobación')g.publicaciones++;g.clics+=Number(r.clics)||0;m.set(r.grupo,g);}
+  return [...m.values()].filter(g=>g.clics>0).sort((a,b)=>b.clics-a.clics).slice(0,10);
+}});
+
+const pintar=()=>{const c=dash.colors||[];const set=(k,v)=>{if(v)document.querySelectorAll('.md-band.'+k+',[data-k="'+k+'"]').forEach(e=>e.style.setProperty('--k',v));};set('real',c[0]);set('est',c[2]||c[1]);set('wa',c[3]||c[1]);};
+pintar();
+dash.onData(()=>{
+  pintar();
+  const s=dash.data('resumen');
+  const ok=s.status==='ok'&&s.data&&s.data[0];
+  const r=ok?s.data[0]:null;
+  const enCurso=!!r&&r.publicadas>0&&r.pendientes>0;
+  const fin=!!r&&r.total>0&&r.publicadas>0&&r.pendientes===0;
+  document.querySelectorAll('#frase-inicio').forEach(e=>{e.hidden=enCurso||fin;});
+  document.querySelectorAll('#frase-curso').forEach(e=>{e.hidden=!enCurso;});
+  document.querySelectorAll('#frase-fin').forEach(e=>{e.hidden=!fin;});
+  document.querySelectorAll('#aviso').forEach(e=>{e.hidden=!(r&&r.pausadas>0);});
+  document.querySelectorAll('#sin-publicadas').forEach(e=>{e.hidden=!!r&&r.publicadas>0;});
+});
+</script>
+
+<script>
+(function(){
+  const val=(field,fmt)=>el=>{
+    const s=dash.data('resumen');
+    if(s.status!=='ok'||!s.data||!s.data[0]){el.textContent='—';el.classList.toggle('dash-skeleton',s.status==='loading');return;}
+    el.classList.remove('dash-skeleton');
+    const v=s.data[0][field];
+    el.textContent=fmt?fmt(v):MD.nf.format(v);
+  };
+  [['publicadas'],['visibles'],['aprobacion'],['omitidas'],['mem-vis','miembros_visibles'],['mem-hechas','miembros_hechas'],['total'],['total2','total'],['pendientes'],['pct','avance'],['pct2','avance'],['pub2','publicadas'],['gru2','grupos'],['grupos'],['grupos_plan'],['props_pub','props_publicadas'],['props','propiedades'],['reels'],['reels_plan'],['clics-total','clics'],['clics-posts','posts_con_clics']]
+    .forEach(([d,f])=>dash.draw(d,val(f||d)));
+  dash.draw('inicio',val('inicio',MD.fechaLarga));
+  dash.draw('fin',val('fin',MD.fechaLarga));
+  dash.draw('fin2',val('fin',MD.fechaLarga));
+  dash.draw('sw-reel',el=>{el.style.background=MD.REEL();});
+  dash.draw('sw-mp',el=>{el.style.background=MD.MP();});
+
+  dash.draw('barra',el=>{
+    const s=dash.data('resumen');
+    el.replaceChildren();
+    if(s.status!=='ok'||!s.data||!s.data[0])return;
+    const r=s.data[0];
+    const seg=(n,bg)=>{const s=document.createElement('span');s.style.width=(r.total?n/r.total*100:0)+'%';s.style.background=bg;return s;};
+    el.append(seg(r.visibles,MD.REEL()),seg(r.aprobacion,MD.MP()),seg(r.omitidas,'var(--cds-chart-muted)'));
+    el.setAttribute('aria-label',`${r.publicadas} de ${r.total} publicaciones hechas`);
+  });
+
+  dash.draw('hoy',el=>{
+    const s=dash.data('por_dia');
+    if(s.status!=='ok'){el.textContent='—';return;}
+    const d=(s.data||[]).find(x=>x.fecha===MD.hoyISO());
+    el.textContent=d?MD.nf.format(d.programadas):'0';
+    if(d)el.setAttribute('data-where','fecha='+d.fecha),el.setAttribute('data-field','programadas');
+    else{el.removeAttribute('data-where');el.removeAttribute('data-field');}
+  });
+
+  dash.draw('chart-dias',el=>{
+    const s=dash.data('por_dia');
+    el.replaceChildren();
+    if(s.status==='error'){const p=document.createElement('p');p.className='md-empty';p.textContent='No se pudo cargar.';el.append(p);return;}
+    if(s.status!=='ok'||!s.data||!s.data.length)return;
+    const data=s.data, W=Math.max(280,el.clientWidth), H=220, m={t:16,r:8,b:28,l:30};
+    const x=d3.scaleBand().domain(data.map(d=>d.fecha)).range([m.l,W-m.r]).padding(0.28);
+    const y=d3.scaleLinear().domain([0,d3.max(data,d=>d.programadas)||1]).nice().range([H-m.b,m.t]);
+    const svg=d3.select(el).append('svg').attr('width','100%').attr('viewBox',`0 0 ${W} ${H}`).attr('role','img').attr('aria-label','Publicaciones programadas y publicadas por día');
+    svg.append('g').selectAll('line').data(y.ticks(4)).join('line').attr('x1',m.l).attr('x2',W-m.r).attr('y1',d=>y(d)).attr('y2',d=>y(d)).style('stroke','var(--cds-chart-grid)');
+    svg.append('g').selectAll('text').data(y.ticks(4)).join('text').attr('x',m.l-6).attr('y',d=>y(d)+4).attr('text-anchor','end').text(d=>d);
+    const hoy=MD.hoyISO();
+    svg.append('g').selectAll('rect').data(data).join('rect').attr('x',d=>x(d.fecha)).attr('width',x.bandwidth()).attr('y',d=>y(d.programadas)).attr('height',d=>y(0)-y(d.programadas)).attr('rx',3).style('fill','var(--cds-chart-muted)').style('opacity',0.45);
+    svg.append('g').selectAll('rect').data(data).join('rect').attr('x',d=>x(d.fecha)).attr('width',x.bandwidth()).attr('y',d=>y(d.publicadas)).attr('height',d=>y(0)-y(d.publicadas)).attr('rx',3).style('fill',MD.REEL());
+    const step=Math.ceil(data.length/Math.max(1,Math.floor((W-m.l)/56)));
+    svg.append('g').selectAll('text').data(data.filter((d,i)=>i%step===0)).join('text').attr('x',d=>x(d.fecha)+x.bandwidth()/2).attr('y',H-8).attr('text-anchor','middle').style('font-weight',d=>d.fecha===hoy?'600':null).text(d=>d.fecha===hoy?'Hoy':MD.fecha(d.fecha));
+    const tip=document.createElement('div');tip.className='md-tip';tip.hidden=true;el.append(tip);
+    svg.append('g').selectAll('rect').data(data).join('rect').attr('x',d=>x(d.fecha)-x.step()*x.paddingInner()/2).attr('width',x.step()).attr('y',m.t).attr('height',H-m.b-m.t).style('fill','transparent')
+      .on('pointermove',(ev,d)=>{tip.hidden=false;tip.textContent=`${MD.fechaLarga(d.fecha)}: ${d.publicadas} de ${d.programadas} publicadas`;const [px]=d3.pointer(ev,el);const w=tip.offsetWidth;tip.style.left=Math.min(Math.max(0,px-w/2),el.clientWidth-w)+'px';tip.style.top='0px';})
+      .on('pointerleave',()=>{tip.hidden=true;});
+  });
+
+  dash.draw('props-list',el=>{
+    const s=dash.data('por_propiedad');
+    el.replaceChildren();
+    if(s.status!=='ok')return;
+    for(const p of s.data||[]){
+      const li=document.createElement('li');
+      const n=document.createElement('span');n.className='name';n.title=p.id+' · '+p.propiedad;
+      const idb=document.createElement('span');idb.className='md-id';idb.textContent=p.id;idb.setAttribute('data-source','por_propiedad');idb.setAttribute('data-field','id');idb.setAttribute('data-where','id='+encodeURIComponent(p.id));
+      n.append(idb,p.propiedad);
+      const c=document.createElement('span');c.className='cnt';
+      const pub=document.createElement('span');pub.textContent=p.publicadas;pub.setAttribute('data-source','por_propiedad');pub.setAttribute('data-field','publicadas');pub.setAttribute('data-where','id='+encodeURIComponent(p.id));
+      const tot=document.createElement('span');tot.textContent=p.total;tot.setAttribute('data-source','por_propiedad');tot.setAttribute('data-field','total');tot.setAttribute('data-where','id='+encodeURIComponent(p.id));
+      c.append(pub,' / ',tot,' grupos');
+      const chips=document.createElement('div');chips.className='md-chips';
+      const t=document.createElement('span');t.className='md-chip';t.textContent=p.tipo;
+      const f=document.createElement('span');f.className='md-chip'+(p.formato==='Reel'?' reel':'');f.textContent=p.formato==='Reel'?'Video':'Marketplace';
+      chips.append(t,f);
+      const bar=document.createElement('div');bar.className='bar';const fill=document.createElement('span');fill.style.width=(p.total?p.publicadas/p.total*100:0)+'%';fill.style.background=p.formato==='Reel'?MD.REEL():MD.MP();bar.append(fill);
+      li.append(n,c,bar,chips);el.append(li);
+    }
+  });
+
+  const filas=(el,rows,cols)=>{
+    el.replaceChildren();
+    for(const r of rows){
+      const tr=document.createElement('tr');tr.setAttribute('data-key',r.n);
+      for(const c of cols){
+        const td=document.createElement('td');
+        if(c==='fecha'){td.className='t';td.textContent=MD.fecha(r.fecha);}
+        else if(c==='hora'){td.className='t';td.textContent=r.hora;}
+        else if(c==='enlace_post'){if(r.enlace_post&&/^https:\/\//.test(r.enlace_post)){const a=document.createElement('a');a.href=r.enlace_post;a.target='_blank';a.rel='noopener';a.textContent='Abrir';td.append(a);}else td.textContent='—';}
+        else if(c==='estado'){td.className='t';td.textContent=r.estado==='Publicada'?'Visible':r.estado;}
+        else td.textContent=r[c];
+        tr.append(td);
+      }
+      el.append(tr);
+    }
+  };
+  dash.draw('tabla-ultimas',el=>{
+    const s=dash.data('publicaciones');
+    if(s.status!=='ok'){el.replaceChildren();return;}
+    const rows=s.data.filter(r=>r.estado==='Publicada'||r.estado==='En aprobación').sort((a,b)=>(b.fecha+b.hora).localeCompare(a.fecha+a.hora)).slice(0,10);
+    filas(el,rows,['fecha','propiedad','grupo','estado','enlace_post']);
+  });
+  const celdas=(el,rows,key,cols)=>{
+    el.replaceChildren();
+    for(const r of rows){const tr=document.createElement('tr');tr.setAttribute('data-key',encodeURIComponent(r[key]));
+      for(const [c,fmt] of cols){const td=document.createElement('td');if(fmt){td.className='num';td.textContent=fmt(r[c]);}else td.textContent=r[c];tr.append(td);}
+      el.append(tr);}
+  };
+  dash.draw('tabla-alcance',el=>{const s=dash.data('alcance');if(s.status!=='ok'){el.replaceChildren();return;}
+    celdas(el,s.data,'escenario',[['escenario'],['porcentaje',v=>v+' %'],['vistas_hoy',v=>MD.nf.format(v)],['vistas_si_aprueban',v=>MD.nf.format(v)]]);});
+  dash.draw('tabla-tipos',el=>{const s=dash.data('por_tipo_grupo');if(s.status!=='ok'){el.replaceChildren();return;}
+    celdas(el,s.data,'tipo_grupo',[['tipo_grupo'],['grupos',v=>MD.nf.format(v)],['miembros',v=>MD.nf.format(v)],['hechas',v=>MD.nf.format(v)]]);});
+  dash.draw('tabla-clics-prop',el=>{const s=dash.data('clics_propiedad');if(s.status!=='ok'){el.replaceChildren();return;}
+    celdas(el,s.data,'id',[['id'],['propiedad'],['clics',v=>MD.nf.format(v)]]);});
+  dash.draw('tabla-clics-grupo',el=>{const s=dash.data('clics_grupo');if(s.status!=='ok'){el.replaceChildren();return;}
+    if(!s.data.length){el.replaceChildren();const tr=document.createElement('tr');const td=document.createElement('td');td.colSpan=3;td.className='md-empty';td.textContent='Todavía no hay clics.';tr.append(td);el.append(tr);return;}
+    celdas(el,s.data,'grupo',[['grupo'],['publicaciones',v=>MD.nf.format(v)],['clics',v=>MD.nf.format(v)]]);});
+  const rank=(tipo,max)=>el=>{const s=dash.data('estadisticas');el.replaceChildren();if(s.status!=='ok')return;
+    const rows=(s.data||[]).filter(r=>r.tipo===tipo).map(r=>({...r,clics:Number(r.clics)||0})).sort((a,b)=>b.clics-a.clics).slice(0,max||6);
+    if(!rows.length){const li=document.createElement('li');li.className='md-empty';li.textContent='Sin datos todavía.';el.append(li);return;}
+    const top=rows[0].clics||1;
+    for(const r of rows){const li=document.createElement('li');li.setAttribute('data-key',encodeURIComponent(r.nombre));
+      const n=document.createElement('span');n.className='nm';n.textContent=r.nombre;n.title=r.nombre;
+      const c=document.createElement('span');c.className='ct';c.textContent=MD.nf.format(r.clics);c.setAttribute('data-source','estadisticas');c.setAttribute('data-field','clics');c.setAttribute('data-where','nombre='+encodeURIComponent(r.nombre));
+      const b=document.createElement('div');b.className='bar';const f=document.createElement('span');f.style.width=(r.clics/top*100)+'%';b.append(f);
+      li.append(n,c,b);el.append(li);}
+  };
+  [['ciudad',6],['dispositivo',3],['sistema',4],['navegador',4],['fuente',3],['medio',3],['campana',10]].forEach(([t,m])=>dash.draw('est-'+t,rank(t,m)));
+  dash.draw('est-dias',el=>{const s=dash.data('estadisticas');el.replaceChildren();if(s.status!=='ok')return;
+    const rows=(s.data||[]).filter(r=>r.tipo==='dia').map(r=>({fecha:r.nombre,clics:Number(r.clics)||0})).sort((a,b)=>a.fecha<b.fecha?-1:1);
+    if(!rows.length){const p=document.createElement('p');p.className='md-empty';p.textContent='Sin clics todavía.';el.append(p);return;}
+    const top=Math.max(...rows.map(r=>r.clics))||1;
+    const wrap=document.createElement('div');wrap.className='md-days';wrap.setAttribute('role','img');wrap.setAttribute('aria-label','Clics por día');
+    for(const r of rows){const d=document.createElement('div');d.style.height=Math.max(2,r.clics/top*100)+'%';d.title=MD.fechaLarga(r.fecha)+': '+r.clics+' clics';wrap.append(d);}
+    const x=document.createElement('div');x.className='md-days-x';const a=document.createElement('span');a.textContent=MD.fecha(rows[0].fecha);const z=document.createElement('span');z.textContent=MD.fecha(rows[rows.length-1].fecha);x.append(a,z);
+    el.append(wrap,x);});
+  dash.draw('tabla-proximas',el=>{
+    const s=dash.data('publicaciones');
+    if(s.status!=='ok'){el.replaceChildren();return;}
+    const rows=s.data.filter(r=>r.estado==='Pendiente').sort((a,b)=>(a.fecha+a.hora).localeCompare(b.fecha+b.hora)).slice(0,8);
+    filas(el,rows,['fecha','hora','propiedad','grupo']);
+  });
+})();
+</script>
+
+
+<p class="rp-fresh" id="rp-fresh"></p>
+</div>
+<script>dash._cargar();</script>
+</body>
+</html>

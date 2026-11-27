@@ -13,28 +13,28 @@ n,fecha,hora,id,propiedad,tipo,formato,grupo,tipo_grupo,miembros,estado,enlace_p
 12,2026-11-25,22:40,V24,"Casa en Puerta Real, Corregidora",Venta,Collage,"Marketplace Corregidora, Qro.",Zona / vecinal,31000,Omitida,,0
 13,2026-11-26,13:00,R11,Departamento en Vista Hermosa,Renta,Collage,CASAS Y DEPARTAMENTOS EN VENTA Y RENTA EN QUERETARO,General venta y renta,55000,Publicada,https://www.facebook.com/groups/1335622259818024/posts/29498658406421032/,0
 14,2026-11-26,13:20,R4,"Departamento en Luma City, Milenio III",Renta,Collage,"Venta y renta de casas, locales y departamentos en Querétaro y alrededores",General venta y renta,2000,Publicada,https://www.facebook.com/groups/6985331944903693/posts/28463406900002887/,0
-15,2026-11-26,13:40,V6,Casa en Fraccionamiento Viñedos,Venta,Collage,Casas en venta Querétaro,Solo venta,11000,Publicada,https://www.facebook.com/groups/1618049765469920/posts/2160190104589214/,3
+15,2026-11-26,13:40,V6,Casa en Fraccionamiento Viñedos,Venta,Collage,Casas en venta Querétaro,Solo venta,11000,Publicada,https://www.facebook.com/groups/1618049765469920/posts/2160190104589214/,4
 16,2026-11-26,14:00,R13,"Casa en Encinos Residencial, El Marqués",Renta,Collage,Renta Departamentos Queretaro,Solo renta,58000,Publicada,https://www.facebook.com/groups/974708003895981/posts/1927173851982720/,2
 17,2026-11-26,14:20,R2,Departamento en renta en Querétaro (72 m²),Renta,Collage,Rentas Querétaro,Solo renta,41000,Publicada,https://www.facebook.com/groups/1262820057390639/posts/3045788539093773/,0
 18,2026-11-26,14:40,R5,Consultorio en Momentum Centro Sur,Renta,Collage,Rentas en Querétaro,Solo renta,39000,Omitida,,0
-19,2026-11-26,15:00,R9,Casa amueblada en Fraccionamiento San Miguel,Renta,Collage,RENTAS DIRECTAS en Querétaro,Solo renta,78000,Publicada,https://www.facebook.com/groups/1678808298974661/posts/3153556628166480/,0
+19,2026-11-26,15:00,R9,Casa amueblada en Fraccionamiento San Miguel,Renta,Collage,RENTAS DIRECTAS en Querétaro,Solo renta,78000,Publicada,https://www.facebook.com/groups/1678808298974661/posts/3153556628166480/,1
 20,2026-11-26,15:20,V21,Locales comerciales en Torre Vista Hermosa,Venta,Collage,Locales Querétaro,Comercial e inversión,16000,Publicada,https://www.facebook.com/groups/1178970385798715/posts/2961255300903539/,0
 21,2026-11-26,15:40,V4,Local comercial en Hacienda La Cruz,Venta,Collage,Locales en Renta y Venta Queretaro,Comercial e inversión,46000,Publicada,https://www.facebook.com/groups/868893873147590/permalink/29323651630578434/,0
 22,2026-11-26,16:00,V14,Departamento en Altos Juriquilla,Venta,Collage,Venta y Renta en Juriquilla,Zona / vecinal,18000,Publicada,https://www.facebook.com/groups/829496080509043/posts/27758878880477398/,0
 23,2026-11-26,16:20,V11,"Departamento con roof garden en Kaoba, Juriquilla",Venta,Collage,SÓLO JURIQUILLA RENTA - VENTA,Zona / vecinal,8000,Publicada,https://www.facebook.com/groups/3732563207031816/posts/4672127329742061/,0
-24,2026-11-26,16:40,V25,Casa en Puerta Navarra,Venta,Collage,"Ventas Carretera a tlacote, Viñedos, Sonterra, Centro Queretaro y más",Zona / vecinal,12000,Publicada,https://www.facebook.com/groups/2670647253170682/posts/4874214942813891/,0
-25,2026-11-26,19:00,R11,Departamento en Vista Hermosa,Renta,Collage,"Venta y renta de casas, locales y departamentos en Querétaro y alrededores",General venta y renta,2000,Pendiente,,0
-26,2026-11-26,19:20,R4,"Departamento en Luma City, Milenio III",Renta,Collage,CASAS Y DEPARTAMENTOS EN VENTA Y RENTA EN QUERETARO,General venta y renta,55000,Pendiente,,0
-27,2026-11-26,19:40,V11,"Departamento con roof garden en Kaoba, Juriquilla",Venta,Collage,Casas en venta Querétaro,Solo venta,11000,Pendiente,,0
-28,2026-11-26,20:00,R13,"Casa en Encinos Residencial, El Marqués",Renta,Collage,Rentas Querétaro,Solo renta,41000,Pendiente,,0
-29,2026-11-26,20:20,R2,Departamento en renta en Querétaro (72 m²),Renta,Collage,RENTAS DIRECTAS en Querétaro,Solo renta,78000,Pendiente,,0
-30,2026-11-26,20:40,R9,Casa amueblada en Fraccionamiento San Miguel,Renta,Collage,Renta Departamentos Queretaro,Solo renta,58000,Pendiente,,0
-31,2026-11-26,21:00,R5,Consultorio en Momentum Centro Sur,Renta,Collage,Locales en Renta y Venta Queretaro,Comercial e inversión,46000,Pendiente,,0
-32,2026-11-26,21:20,V4,Local comercial en Hacienda La Cruz,Venta,Collage,Locales Querétaro,Comercial e inversión,16000,Pendiente,,0
-33,2026-11-26,21:40,R12,Terreno comercial sobre Carretera 57,Renta,Collage,Renta locales Querétaro,Comercial e inversión,7000,Pendiente,,0
-34,2026-11-26,22:00,V3,Departamento en Milenio III (Camino Real de Carretas),Venta,Collage,MILENIO III #ComercioLocal,Zona / vecinal,5000,Pendiente,,0
-35,2026-11-26,22:20,V9,Terreno comercial en San Juan del Río,Venta,Collage,Terrenos todo Queretaro,Comercial e inversión,34000,Pendiente,,0
-36,2026-11-26,22:40,V18,"Terreno en Zibatá, Privada Ágata",Venta,Collage,TERRENOS EN VENTA QUERETARO,Comercial e inversión,98000,Pendiente,,0
+24,2026-11-26,16:40,V25,Casa en Puerta Navarra,Venta,Collage,"Ventas Carretera a tlacote, Viñedos, Sonterra, Centro Queretaro y más",Zona / vecinal,12000,Publicada,https://www.facebook.com/groups/2670647253170682/posts/4874214942813891/,1
+25,2026-11-26,19:00,R11,Departamento en Vista Hermosa,Renta,Collage,"Venta y renta de casas, locales y departamentos en Querétaro y alrededores",General venta y renta,2000,Publicada,https://www.facebook.com/groups/6985331944903693/posts/28465217866488457/,0
+26,2026-11-26,19:20,R4,"Departamento en Luma City, Milenio III",Renta,Collage,CASAS Y DEPARTAMENTOS EN VENTA Y RENTA EN QUERETARO,General venta y renta,55000,Publicada,https://www.facebook.com/groups/1335622259818024/posts/29500998189520387/,0
+27,2026-11-26,19:40,V11,"Departamento con roof garden en Kaoba, Juriquilla",Venta,Collage,Casas en venta Querétaro,Solo venta,11000,Publicada,https://www.facebook.com/groups/1618049765469920/posts/2160380487903509/,0
+28,2026-11-26,20:00,R13,"Casa en Encinos Residencial, El Marqués",Renta,Collage,Rentas Querétaro,Solo renta,41000,Publicada,https://www.facebook.com/groups/1262820057390639/posts/3045988325740461/,0
+29,2026-11-26,20:20,R2,Departamento en renta en Querétaro (72 m²),Renta,Collage,RENTAS DIRECTAS en Querétaro,Solo renta,78000,Publicada,https://www.facebook.com/groups/1678808298974661/posts/3153718108150332/,0
+30,2026-11-26,20:40,R9,Casa amueblada en Fraccionamiento San Miguel,Renta,Collage,Renta Departamentos Queretaro,Solo renta,58000,Publicada,https://www.facebook.com/groups/974708003895981/posts/1927355575297881/,0
+31,2026-11-26,21:00,R5,Consultorio en Momentum Centro Sur,Renta,Collage,Locales en Renta y Venta Queretaro,Comercial e inversión,46000,Publicada,https://www.facebook.com/groups/868893873147590/permalink/29324886360454961/,0
+32,2026-11-26,21:20,V4,Local comercial en Hacienda La Cruz,Venta,Collage,Locales Querétaro,Comercial e inversión,16000,Omitida,,0
+33,2026-11-26,21:40,R12,Terreno comercial sobre Carretera 57,Renta,Collage,Renta locales Querétaro,Comercial e inversión,7000,En aprobación,,0
+34,2026-11-26,22:00,V3,Departamento en Milenio III (Camino Real de Carretas),Venta,Collage,MILENIO III #ComercioLocal,Zona / vecinal,5000,Omitida,,0
+35,2026-11-26,22:20,V9,Terreno comercial en San Juan del Río,Venta,Collage,Terrenos todo Queretaro,Comercial e inversión,34000,Publicada,https://www.facebook.com/groups/5391149484332031/posts/29839877189032587/,0
+36,2026-11-26,22:40,V18,"Terreno en Zibatá, Privada Ágata",Venta,Collage,TERRENOS EN VENTA QUERETARO,Comercial e inversión,98000,Publicada,https://www.facebook.com/groups/2131366797174084/posts/4419138128396928/,0
 37,2026-11-27,13:00,R12,Terreno comercial sobre Carretera 57,Renta,Collage,"Venta y renta de casas, locales y departamentos en Querétaro y alrededores",General venta y renta,2000,Pendiente,,0
 38,2026-11-27,13:20,R2,Departamento en renta en Querétaro (72 m²),Renta,Collage,CASAS Y DEPARTAMENTOS EN VENTA Y RENTA EN QUERETARO,General venta y renta,55000,Pendiente,,0
 39,2026-11-27,13:40,V12,"Departamento con jardín privado en Kaoba, Juriquilla",Venta,Collage,Casas en venta Querétaro,Solo venta,11000,Pendiente,,0
